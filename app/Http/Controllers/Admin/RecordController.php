@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRecordRequest;
 use App\Http\Requests\UpdateRecordRequest;
 use App\Models\Record;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -32,7 +33,8 @@ class RecordController extends Controller
     public function create()
     {
         $types=Type::all();
-        return view('admin.records.create', compact('types'));
+        $technologies=Technology::all();
+        return view('admin.records.create', compact('types','technologies'));
     }
 
     /**
@@ -51,6 +53,9 @@ class RecordController extends Controller
         }
         $newRecord->fill($data);
         $newRecord->save();
+        if(isset($data['technologies'])){
+            $newRecord->technologies()->sync($data['technologies']);
+        }
         return redirect()->route('admin.records.show', $newRecord);
     }
 
@@ -74,7 +79,8 @@ class RecordController extends Controller
     public function edit(Record $record)
     {
         $types=Type::all();
-        return view('admin.records.edit', compact('record','types'));
+        $technologies=Technology::all();
+        return view('admin.records.edit', compact('record','types','technologies'));
     }
 
     /**
@@ -101,6 +107,8 @@ class RecordController extends Controller
                 $record->image = Storage::put('uploads', $data['image']);
             }
         }
+        $technologies = isset($data['technologies']) ? $data['technologies'] : [];
+        $record->technologies()->sync($technologies);
         $record->update($data);
         return view('admin.records.show', compact('record'));
     }
