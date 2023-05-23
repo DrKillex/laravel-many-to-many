@@ -17,7 +17,7 @@ class TypeSeeder extends Seeder
      */
     public function run()
     {
-        $types = ['html css', 'js', 'php', 'laravel', 'vue'];
+        $types = ['FRONTEND', 'BACKEND', 'DATABASE', 'MISC'];
         Schema::disableForeignKeyConstraints();
         Type::truncate();
         Schema::enableForeignKeyConstraints();

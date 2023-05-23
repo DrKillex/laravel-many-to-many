@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('technologies', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 70)->unique();
-            $table->string('slug');
+        Schema::create('record_technology', function (Blueprint $table) {
+            $table->foreignId('record_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('technology_id')->constrained()->cascadeOnDelete();
+            $table->primary(['record_id', 'technology_id']);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('technologies');
+        Schema::dropIfExists('record_technology');
     }
 };
